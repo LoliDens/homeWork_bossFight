@@ -22,13 +22,14 @@ namespace homeWork_bossFight
             const string CommandCreateWarriorWichShieald = "3";
 
             int hpPalyer = 100;
-            int dameagSword = 1;
+            int dameagSword = 12;
             int damaegBlood = 10;
             int countBlood = 0;
             int levelSword = 1;
-            int timeBleeding = 0;
+            int powerBleeding = 0;
             int priseLevelUpSword = 2;
             int poverHeal = 10;
+
 
             int scaleHpWarriorWichSword = 2;
             int scaleDamageWarriorWichSword = 2;
@@ -55,10 +56,9 @@ namespace homeWork_bossFight
             string userInput;
             int useBlood = 0;
 
-
             Console.WriteLine($"Попав в тронный зал, вы видите {nameBoss}");
 
-            while (gameOver == false)
+            while (hpBoss > 0 && hpPalyer > 0)
             {
                 userUsedMove = false;
                 Console.WriteLine($"Хп игрока - {hpPalyer}" +
@@ -73,7 +73,7 @@ namespace homeWork_bossFight
 
                 Console.WriteLine($"Хп {nameBoss} - {hpBoss}");
 
-                if (timeBleeding > 0) Console.WriteLine($"У {nameBoss} кровотичение с тиком {timeBleeding}");
+                if (powerBleeding > 0) Console.WriteLine($"У {nameBoss} кровотичение действует на {powerBleeding} ход(-ов) ");
 
                 while (userUsedMove == false)
                 {
@@ -87,17 +87,17 @@ namespace homeWork_bossFight
 
                     switch (userInput)
                     {
-                        case CommandSwordStrike:  //Удар мечем
-                            Console.WriteLine($"Взмахнув мечем вы ударяете по {nameBoss}, нанося {dameagSword * levelSword} урона и вызываете у него кровотичение" +
-                                $"" +
-                                $".");
+                        case CommandSwordStrike: 
+                            Console.WriteLine($"Взмахнув мечем вы ударяете по {nameBoss}, нанося {dameagSword * levelSword} урона и вызываете у него кровотичение");
+                            Console.ReadKey();
                             hpBoss -= dameagSword * levelSword;
                             countBlood += levelSword;
-                            timeBleeding += levelSword + 1;
+                            powerBleeding ++;
+                            powerBleeding += levelSword;
                             userUsedMove = true;
                             break;
 
-                        case CommandBloodExplosion: //Взрыв крови
+                        case CommandBloodExplosion: 
                             Console.Write("Сколько крови вы хотите искользовать: ");
                             useBlood = Convert.ToInt32(Console.ReadLine());
 
@@ -107,15 +107,15 @@ namespace homeWork_bossFight
                             }
                             else
                             {
-                                Console.WriteLine($"Вы взрывете кровь {nameBoss} нанося ему {useBlood * damaegBlood * timeBleeding} урона.\nКрвотечение у {nameBoss} остановлено ");
-                                hpBoss -= useBlood * damaegBlood * timeBleeding;
-                                timeBleeding = 0;
+                                Console.WriteLine($"Вы взрывете кровь {nameBoss} нанося ему {useBlood * damaegBlood * powerBleeding} урона.\nКрвотечение у {nameBoss} остановлено ");
+                                hpBoss -= useBlood * damaegBlood * powerBleeding;
+                                powerBleeding = 0;
                                 countBlood -= useBlood;
                                 userUsedMove = true;
                             }
                             break;
 
-                        case CommandWarriors: //Создание войнов
+                        case CommandWarriors: 
                             Console.WriteLine("В кого вы хотите влить кровь?" +
                                 $"\n{CommandCreateWarriorWichSword} - Воин" +
                                 $"\n{CommandCreateWarriorWichBow} - Лучник" +
@@ -180,7 +180,7 @@ namespace homeWork_bossFight
                             }
                             break;
 
-                        case CommandLevelUpSword://Улучшение мечя
+                        case CommandLevelUpSword:
                             Console.Write("Сколько крови вы хотите влить в меч ");
                             useBlood = Convert.ToInt32(Console.ReadLine());
 
@@ -211,26 +211,22 @@ namespace homeWork_bossFight
                                 countBlood -= useBlood;
                                 userUsedMove = true;
                             }
+                            break;
 
+                        default:
+                            Console.WriteLine("Ошибка ввода");
                             break;
                     }
                 }
 
-                if (hpBoss < 1)
-                {
-                    Console.WriteLine("Вы убили босса. Игра окончена");
-                    Console.ReadKey();
-                    gameOver = true;
-                }
-
-                timeBleeding--;
+                if (powerBleeding > 0 ) powerBleeding--;
 
                 if (hpWarriorWichSword > 0)
                 {
                     hpBoss -= damageWarriorWichSword;
-                    timeBleeding += damageWarriorWichSword;
+                    powerBleeding += damageWarriorWichSword;
                     countBlood++;
-                    Console.WriteLine($"Вион наносит {nameBoss} {damageWarriorWichSword} урона, изымая у него кровь и продлевает кровотичение до {timeBleeding}");
+                    Console.WriteLine($"Вион наносит {nameBoss} {damageWarriorWichSword} урона, изымая у него кровь и продлевает кровотичение до {powerBleeding}");
                 }
 
                 if (hpWarriorWichBow > 0)
@@ -266,14 +262,11 @@ namespace homeWork_bossFight
                     Console.WriteLine($"{nameBoss} наносит вам {damageBoss} урона");
                 }
 
-                if (hpPalyer < 1) 
-                {
-                    Console.WriteLine("Вы умерли. Игра окончина");
-                    Console.ReadKey();
-                    gameOver = true;
-                }
-
+                Console.Clear();
             }
+
+
+            
         }
     }
 }

@@ -289,17 +289,17 @@ namespace homeWork_bossFight
                 Console.Clear();
             }
 
-            if (hpPalyer <= criticalLevel)
+            if (hpBoss == criticalLevel && hpPalyer == criticalLevel)
             {
-                Console.WriteLine($"{nameBoss} победил вас");
+                Console.WriteLine("Битва была легендарной, но оба война пали");
             }
             else if (hpBoss <= criticalLevel)
             {
                 Console.WriteLine($"Вы победили {nameBoss}");
             }
-            else if (hpBoss == criticalLevel && hpPalyer == criticalLevel) 
+            else if(hpPalyer <= criticalLevel)
             {
-                Console.WriteLine("Битва была легендарной, но оба война пали");
+                Console.WriteLine($"{nameBoss} победил вас");
             }
 
             Console.ReadKey();

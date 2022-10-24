@@ -30,7 +30,6 @@ namespace homeWork_bossFight
             int priseLevelUpSword = 2;
             int poverHeal = 10;
 
-
             int scaleHpWarriorWichSword = 2;
             int scaleDamageWarriorWichSword = 2;
             int scaleHpWarriorWhichBow = 1;
@@ -45,37 +44,40 @@ namespace homeWork_bossFight
             int hpWarriorWichShieald = 0;
             int damageWarriorWichShieald = 0;
 
-
             int hpBoss = 1000;
             string nameBoss = "NightKing";
             int damageBoss = 5;
 
             bool gameOver = false;
-            bool userUsedMove = false;
+            bool isUsedMove = false;
 
             string userInput;
             int useBlood = 0;
+            int criticalLevel = 0;
+            int levelUpSwordCost = 3;
+            int minimulPriseCast = 1;
+            int minimulBleeding = 0;
 
             Console.WriteLine($"Попав в тронный зал, вы видите {nameBoss}");
 
-            while (hpBoss > 0 && hpPalyer > 0)
+            while (hpBoss > criticalLevel && hpPalyer > criticalLevel)
             {
-                userUsedMove = false;
+                isUsedMove = false;
                 Console.WriteLine($"Хп игрока - {hpPalyer}" +
                     $"\nУровень меча - {levelSword}" +
                     $"\nКоличество крови - {countBlood}");
 
-                if (hpWarriorWichSword > 0) Console.WriteLine($"Хп мечника - {hpWarriorWichSword}\nУрон мечника - {damageWarriorWichSword}");
+                if (hpWarriorWichSword > criticalLevel) Console.WriteLine($"Хп мечника - {hpWarriorWichSword}\nУрон мечника - {damageWarriorWichSword}");
 
-                if (hpWarriorWichShieald > 0) Console.WriteLine($"Хп защитника - {hpWarriorWichShieald}\nУрон защитника - {damageWarriorWichShieald}");
+                if (hpWarriorWichShieald > criticalLevel) Console.WriteLine($"Хп защитника - {hpWarriorWichShieald}\nУрон защитника - {damageWarriorWichShieald}");
 
-                if (hpWarriorWichBow > 0) Console.WriteLine($"Хп мечника - {hpWarriorWichBow}\nУрон мечника - {damageWarriorWichBow}");
+                if (hpWarriorWichBow > criticalLevel) Console.WriteLine($"Хп мечника - {hpWarriorWichBow}\nУрон мечника - {damageWarriorWichBow}");
 
                 Console.WriteLine($"Хп {nameBoss} - {hpBoss}");
 
                 if (powerBleeding > 0) Console.WriteLine($"У {nameBoss} кровотичение действует на {powerBleeding} ход(-ов) ");
 
-                while (userUsedMove == false)
+                while (isUsedMove == false)
                 {
                     Console.WriteLine($"Что вы хотите сделать" +
                         $"\n {CommandSwordStrike} - чтобы сделать удар мечом" +
@@ -94,14 +96,14 @@ namespace homeWork_bossFight
                             countBlood += levelSword;
                             powerBleeding ++;
                             powerBleeding += levelSword;
-                            userUsedMove = true;
+                            isUsedMove = true;
                             break;
 
                         case CommandBloodExplosion: 
                             Console.Write("Сколько крови вы хотите искользовать: ");
                             useBlood = Convert.ToInt32(Console.ReadLine());
 
-                            if (useBlood < 1 || useBlood > countBlood)
+                            if (useBlood < minimulPriseCast || useBlood > countBlood)
                             {
                                 Console.WriteLine("Введино неверное значение");
                             }
@@ -111,7 +113,7 @@ namespace homeWork_bossFight
                                 hpBoss -= useBlood * damaegBlood * powerBleeding;
                                 powerBleeding = 0;
                                 countBlood -= useBlood;
-                                userUsedMove = true;
+                                isUsedMove = true;
                             }
                             break;
 
@@ -124,7 +126,7 @@ namespace homeWork_bossFight
                             Console.Write("Сколько крови влить :");
                             useBlood = Convert.ToInt32(Console.ReadLine());
 
-                            if (useBlood < 1 || useBlood > countBlood)
+                            if (useBlood < minimulPriseCast || useBlood > countBlood)
                             {
                                 Console.WriteLine("Введино неверное значение");
                             }
@@ -135,7 +137,7 @@ namespace homeWork_bossFight
                                 switch (userInput)
                                 {
                                     case CommandCreateWarriorWichSword:
-                                        if (hpWarriorWichSword == 0)
+                                        if (hpWarriorWichSword <= criticalLevel)
                                         {
                                             Console.WriteLine($"Создан Воин с {useBlood * scaleHpWarriorWichSword} хп и {useBlood * scaleDamageWarriorWichSword} уроном");
                                         }
@@ -149,7 +151,7 @@ namespace homeWork_bossFight
                                         break;
 
                                     case CommandCreateWarriorWichBow:
-                                        if (hpWarriorWichBow == 0)
+                                        if (hpWarriorWichBow <= criticalLevel)
                                         {
                                             Console.WriteLine($"Создан Лучник с {useBlood * scaleHpWarriorWhichBow} хп и {useBlood * scaleDamageWarriorWichBow} уроном");
                                         }
@@ -163,7 +165,7 @@ namespace homeWork_bossFight
                                         break;
 
                                     case CommandCreateWarriorWichShieald:
-                                        if (hpWarriorWichShieald == 0)
+                                        if (hpWarriorWichShieald <= criticalLevel)
                                         {
                                             Console.WriteLine($"Создан Защитник с {useBlood * scaleHpWarriorWichShieald} хп и {useBlood * scaleDamageWarriorWhichShieald} уроном");
                                         }
@@ -176,7 +178,8 @@ namespace homeWork_bossFight
                                         damageWarriorWichShieald += useBlood * scaleDamageWarriorWhichShieald;
                                         break;
                                 }
-                                userUsedMove = true;
+
+                                isUsedMove = true;
                             }
                             break;
 
@@ -184,7 +187,7 @@ namespace homeWork_bossFight
                             Console.Write("Сколько крови вы хотите влить в меч ");
                             useBlood = Convert.ToInt32(Console.ReadLine());
 
-                            if (useBlood < 3 || useBlood > countBlood)
+                            if (useBlood < levelUpSwordCost || useBlood > countBlood)
                             {
                                 Console.WriteLine("Введино неверное значение или недостаточно крови");
                             }
@@ -193,7 +196,7 @@ namespace homeWork_bossFight
                                 levelSword = useBlood / priseLevelUpSword;
                                 countBlood = useBlood % priseLevelUpSword;
                                 Console.WriteLine($"Вы улучшили свой меч. Теперть он {levelSword} уровня");
-                                userUsedMove = true;
+                                isUsedMove = true;
                             }
                             break;
 
@@ -201,7 +204,7 @@ namespace homeWork_bossFight
                             Console.Write("Сколько крови вы хотите влить в себя ");
                             useBlood = Convert.ToInt32(Console.ReadLine());
 
-                            if (useBlood < 1 || useBlood > countBlood)
+                            if (useBlood < minimulPriseCast || useBlood > countBlood)
                             {
                                 Console.WriteLine("Введино неверное значение или недостаточно крови");
                             }
@@ -209,7 +212,7 @@ namespace homeWork_bossFight
                             {
                                 hpPalyer += useBlood * poverHeal;
                                 countBlood -= useBlood;
-                                userUsedMove = true;
+                                isUsedMove = true;
                             }
                             break;
 
@@ -219,9 +222,9 @@ namespace homeWork_bossFight
                     }
                 }
 
-                if (powerBleeding > 0 ) powerBleeding--;
+                if (powerBleeding > minimulBleeding ) powerBleeding--;
 
-                if (hpWarriorWichSword > 0)
+                if (hpWarriorWichSword > criticalLevel)
                 {
                     hpBoss -= damageWarriorWichSword;
                     powerBleeding += damageWarriorWichSword;
@@ -229,32 +232,53 @@ namespace homeWork_bossFight
                     Console.WriteLine($"Вион наносит {nameBoss} {damageWarriorWichSword} урона, изымая у него кровь и продлевает кровотичение до {powerBleeding}");
                 }
 
-                if (hpWarriorWichBow > 0)
+                if (hpWarriorWichBow > criticalLevel)
                 {
                     hpBoss -= damageWarriorWichBow;
                     Console.WriteLine($"Лучник наносит {nameBoss} {damageWarriorWichBow} урона");
                 }
 
-                if (hpWarriorWichShieald > 0) 
+                if (hpWarriorWichShieald > criticalLevel) 
                 {
                     hpBoss -= damageWarriorWichShieald;
                     Console.WriteLine($"Защитник наносит {nameBoss} {damageWarriorWichShieald}");
                 }
 
-                if (hpWarriorWichShieald > 0)
+                if (hpWarriorWichShieald > criticalLevel)
                 {
                     hpWarriorWichShieald -= damageBoss;
                     Console.WriteLine($"{nameBoss} наносит защитнику {damageBoss} урона");
+
+                    if (hpWarriorWichShieald <= criticalLevel)
+                    {
+                        hpWarriorWichShieald = 0;
+                        damageWarriorWichShieald = 0;
+                        Console.WriteLine($"Защитник пал от рук {nameBoss}");
+                    }
                 }
-                else if (hpWarriorWichSword > 0)
+                else if (hpWarriorWichSword > criticalLevel)
                 {
                     hpWarriorWichSword -= damageBoss;
                     Console.WriteLine($"{nameBoss} наносит мечнику {damageBoss} урона");
+
+                    if (hpWarriorWichSword <= criticalLevel)
+                    {
+                        hpWarriorWichSword = 0;
+                        damageWarriorWichSword = 0;
+                        Console.WriteLine($"Мечник пал от рук {nameBoss}");
+                    }
                 }
-                else if (hpWarriorWichBow > 0) 
+                else if (hpWarriorWichBow > criticalLevel) 
                 {
                     hpWarriorWichBow -= damageBoss;
                     Console.WriteLine($"{nameBoss} наносит лучнику {damageBoss} урона");
+
+                    if (hpWarriorWichBow <= criticalLevel)
+                    {
+                        hpWarriorWichBow = 0;
+                        damageWarriorWichBow = 0;
+                        Console.WriteLine($"Лучник пал от рук {nameBoss}");
+                    }
                 }
                 else 
                 {
@@ -265,8 +289,16 @@ namespace homeWork_bossFight
                 Console.Clear();
             }
 
+            if (hpPalyer <= criticalLevel)
+            {
+                Console.WriteLine($"{nameBoss} побудил вас");
+            }
+            else if (hpBoss <= criticalLevel) 
+            {
+                Console.WriteLine($"Вы победили {nameBoss}");
+            }
 
-            
+            Console.ReadKey();
         }
     }
 }

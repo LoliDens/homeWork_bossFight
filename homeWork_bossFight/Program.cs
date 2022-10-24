@@ -30,11 +30,11 @@ namespace homeWork_bossFight
             int priseLevelUpSword = 2;
             int poverHeal = 10;
 
-            int scaleHpWarriorWichSword = 2;
-            int scaleDamageWarriorWichSword = 2;
+            int scaleHpWarriorWichSword = 1;
+            int scaleDamageWarriorWichSword = 1;
             int scaleHpWarriorWhichBow = 1;
             int scaleDamageWarriorWichBow = 4;
-            int scaleHpWarriorWichShieald = 6;
+            int scaleHpWarriorWichShieald = 10;
             int scaleDamageWarriorWhichShieald = 1; 
 
             int hpWarriorWichSword = 0;
@@ -91,7 +91,6 @@ namespace homeWork_bossFight
                     {
                         case CommandSwordStrike: 
                             Console.WriteLine($"Взмахнув мечем вы ударяете по {nameBoss}, нанося {dameagSword * levelSword} урона и вызываете у него кровотичение");
-                            Console.ReadKey();
                             hpBoss -= dameagSword * levelSword;
                             countBlood += levelSword;
                             powerBleeding ++;
@@ -284,6 +283,7 @@ namespace homeWork_bossFight
                 {
                     hpPalyer -= damageBoss;
                     Console.WriteLine($"{nameBoss} наносит вам {damageBoss} урона");
+                    Console.ReadKey();
                 }
 
                 Console.Clear();
@@ -291,11 +291,15 @@ namespace homeWork_bossFight
 
             if (hpPalyer <= criticalLevel)
             {
-                Console.WriteLine($"{nameBoss} побудил вас");
+                Console.WriteLine($"{nameBoss} победил вас");
             }
-            else if (hpBoss <= criticalLevel) 
+            else if (hpBoss <= criticalLevel)
             {
                 Console.WriteLine($"Вы победили {nameBoss}");
+            }
+            else if (hpBoss == criticalLevel && hpPalyer == criticalLevel) 
+            {
+                Console.WriteLine("Битва была легендарной, но оба война пали");
             }
 
             Console.ReadKey();
